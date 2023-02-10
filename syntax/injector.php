@@ -54,7 +54,6 @@ class syntax_plugin_plantumlparser_injector extends DokuWiki_Syntax_Plugin {
 
         return [
             'svg' => strstr($diagramObject->getSVG(), "<svg"),
-            'png' =>  "<img src='data:image/png;base64,".base64_encode($diagramObject->callCurl($diagramObject->getPNGDiagramUrl()))."'>",
             'markup' => $diagramObject->getMarkup(),
             'id' => sha1($diagramObject->getSVGDiagramUrl()),
             'include_links' => $this->getConf('DefaultShowLinks'),
@@ -80,8 +79,7 @@ class syntax_plugin_plantumlparser_injector extends DokuWiki_Syntax_Plugin {
         $renderer->doc .= "<div id='plant-uml-diagram-".$data['id']."'>";
         if(strlen($data['svg']) > 0) {
 			if(is_a($renderer,'renderer_plugin_dw2pdf') && (preg_match("/(@startlatex|@startmath|<math|<latex)/", $data['markup']))){
-				// $renderer->doc .= "<img src='".$data['url']['png']."'>";
-                                $renderer->doc .= $data['png']; 
+				$renderer->doc .= "<img src='".$data['url']['png']."'>";
 			}
 			else {
 				$renderer->doc .= $data['svg'];
